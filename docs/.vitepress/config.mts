@@ -209,6 +209,10 @@ export default defineConfig({
   title: "E_Power · 知识档案",
   description: "记录数学推导、编程实践与学习随记。",
   cleanUrls: true,
+  head: [
+    ["link", { rel: "stylesheet", href: "/fonts/jetbrains-maple-mono/regular/result.css" }],
+    ["link", { rel: "stylesheet", href: "/fonts/jetbrains-maple-mono/bold/result.css" }],
+  ],
   markdown: {
     math: true,
     lineNumbers: true,
