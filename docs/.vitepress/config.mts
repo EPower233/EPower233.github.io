@@ -2,7 +2,6 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { defineConfig, type DefaultTheme } from "vitepress";
-import { defineTeekConfig } from "vitepress-theme-teek/config";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const docsDir = path.resolve(__dirname, "..");
@@ -75,7 +74,7 @@ function buildSidebarItems(dirPath: string, urlPrefix: string): DefaultTheme.Sid
       if (children.length > 0) {
         items.push({
           text: entry.name,
-          collapsed: false,
+          collapsed: true,
           items: children,
         });
       }
@@ -89,45 +88,6 @@ function buildSidebarItems(dirPath: string, urlPrefix: string): DefaultTheme.Sid
   }
   return items;
 }
-
-const teekConfig = defineTeekConfig({
-  teekTheme: true,
-  teekHome: true,
-  vpHome: false,
-  pageStyle: "segment",
-  author: {
-    name: "E_Power",
-    link: "https://github.com/EPower233",
-  },
-  blogger: {
-    name: "E_Power",
-    slogan: "把探索，归档为知识。",
-  },
-  banner: {
-    enabled: true,
-    name: "E_Power · 知识档案",
-    bgStyle: "pure",
-    pureBgColor: "#1b2432",
-    descStyle: "types",
-    description: ["数学推导、编程实践与学习随记。"],
-  },
-  docAnalysis: {
-    createTime: "2026-11-18",
-  },
-  footerInfo: {
-    theme: {
-      show: true,
-    },
-    copyright: {
-      show: true,
-      createYear: 2026,
-      suffix: "E_Power",
-    },
-  },
-  vitePlugins: {
-    sidebar: false,
-  },
-});
 
 const calloutTypeMap: Record<string, string> = {
   note: "info",
@@ -230,30 +190,30 @@ function obsidianCalloutPlugin(md: any) {
   });
 }
 
+const sidebar: DefaultTheme.SidebarItem[] = [
+  {
+    text: "Mathematics",
+    collapsed: false,
+    items: buildSidebarItems(path.join(docsDir, "Mathematics"), "/Mathematics"),
+  },
+];
+
 export default defineConfig({
-  extends: teekConfig,
   lang: "zh-CN",
   title: "E_Power · 知识档案",
-  description: "E_Power 的学习与技术档案：记录数学推导、编程实践与持续探索。",
+  description: "记录数学推导、编程实践与学习随记。",
   cleanUrls: true,
-  lastUpdated: true,
   markdown: {
     math: true,
     config: (md) => {
       md.use(obsidianCalloutPlugin);
     },
   },
+  vite: {
+    ssr: { noExternal: ["vitepress-theme-teek"] },
+  },
   themeConfig: {
-    nav: [
-      { text: "首页", link: "/" },
-      { text: "Mathematics", link: "/Mathematics/" },
-      { text: "归档", link: "/archives" },
-      { text: "分类", link: "/categories" },
-      { text: "标签", link: "/tags" },
-    ],
-    sidebar: {
-      "/Mathematics/": buildSidebarItems(path.join(docsDir, "Mathematics"), "/Mathematics"),
-    },
+    sidebar,
     socialLinks: [
       { icon: "github", link: "https://github.com/EPower233" },
     ],
@@ -262,7 +222,7 @@ export default defineConfig({
     },
     outline: {
       level: [2, 3],
-      label: "页面导航",
+      label: "本页目录",
     },
     docFooter: {
       prev: "上一页",
