@@ -5,6 +5,12 @@ import { defineConfig, type DefaultTheme } from "vitepress";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const docsDir = path.resolve(__dirname, "..");
+const oneLightProMix = JSON.parse(
+  fs.readFileSync(path.join(__dirname, "themes", "OneLight-Pro-mix.json"), "utf-8")
+);
+const oneDarkProMix = JSON.parse(
+  fs.readFileSync(path.join(__dirname, "themes", "OneDark-Pro-mix.json"), "utf-8")
+);
 
 const chineseOrder = new Map<string, number>([
   ["零", 0],
@@ -205,6 +211,11 @@ export default defineConfig({
   cleanUrls: true,
   markdown: {
     math: true,
+    lineNumbers: true,
+    theme: {
+      light: oneLightProMix,
+      dark: oneDarkProMix,
+    },
     config: (md) => {
       md.use(obsidianCalloutPlugin);
     },
